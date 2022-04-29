@@ -103,7 +103,7 @@ namespace AppWeb_Superviseur.User
         }
 
         //Mettre à jour de l'enregistrement avec le idSite
-        public void UpdateRow(int idSite, string nomsite, string urlSite, int interval, string dernierCheck, int statut)
+        public void UpdateRow(int idSite, string nomsite, string urlSite, int interval, int statut)
         {
             AdoClass ado = new AdoClass();
             try
@@ -120,7 +120,7 @@ namespace AppWeb_Superviseur.User
                 ado.command.Parameters.AddWithValue("@nomSite", nomsite);
                 ado.command.Parameters.AddWithValue("@urlSite", urlSite);
                 ado.command.Parameters.AddWithValue("@interval", interval.ToString());
-                ado.command.Parameters.AddWithValue("@dernierCheck", dernierCheck.ToString());
+                ado.command.Parameters.AddWithValue("@dernierCheck", DateTime.Now);
                 ado.command.Parameters.AddWithValue("@statut", statut.ToString());
                 ado.Connecter();
                 ado.command.ExecuteNonQuery();
@@ -164,7 +164,7 @@ namespace AppWeb_Superviseur.User
                               AppWebs.Rows[i]["nomSite"].ToString().TrimEnd(),
                               AppWebs.Rows[i]["urlSite"].ToString().TrimEnd(),           
                               (int)AppWebs.Rows[i]["interval"],                      
-                              curentTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),      
+                              //curentTime.ToString("yyyy-MM-dd HH:mm:ss.fff"),      
                               res);
                     //Mise a jour des dernierCheck et Statut
                     AppWebs.Rows[i]["dernierCheck"] = curentTime;

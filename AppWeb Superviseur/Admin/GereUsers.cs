@@ -62,33 +62,55 @@ namespace AppWeb_Superviseur.Admin
             afficher();
         }
 
+        //Fonction qui verifie si tous les champs sont remplis
+        private bool VerifierChamps()
+        {
+            return ( !String.IsNullOrEmpty(txtbxLogin.Text) &&
+                     !String.IsNullOrEmpty(txtbxNom.Text)   &&
+                     !String.IsNullOrEmpty(txtbxPre.Text)   &&
+                     !String.IsNullOrEmpty(txtbxMdp.Text)   &&
+                     !String.IsNullOrEmpty(txtbxEmail.Text) &&
+                     !String.IsNullOrEmpty(txtbxTel.Text)   &&
+                     rchTxtbxAdr.Text != "");                                
+        }
+
+
         //Bouton Ajouter
         private void btnAjt_Click(object sender, EventArgs e)
         {
             ado = new AdoClass();
             try
             {
-                ado.command = new System.Data.SqlClient.SqlCommand("INSERT INTO utilisateur VALUES (@loginn,@motDePass,@nomUtilisateur,@prenomUtilisateur,@sexe,@dateNaiss,@adresse,@email,@telephone, @admine)", ado.connection);
-                ado.command.Parameters.AddWithValue("@loginn",           txtbxLogin.Text  );
-                ado.command.Parameters.AddWithValue("@motDePass",        txtbxMdp.Text    );
-                ado.command.Parameters.AddWithValue("@nomUtilisateur",   txtbxNom.Text    );
-                ado.command.Parameters.AddWithValue("@prenomUtilisateur",txtbxPre.Text    );
-                ado.command.Parameters.AddWithValue("@sexe",             cmbxSexe.Text    );
-                ado.command.Parameters.AddWithValue("@dateNaiss",        dtmPicker.Value  );
-                ado.command.Parameters.AddWithValue("@adresse",          rchTxtbxAdr.Text );
-                ado.command.Parameters.AddWithValue("@email",            txtbxEmail.Text  );
-                ado.command.Parameters.AddWithValue("@telephone",        txtbxTel.Text    );
-                ado.command.Parameters.AddWithValue("@admine",           0                );
-                ado.Connecter();
-                ado.command.ExecuteNonQuery();
-                MessageBox.Show("Utilisateur Ajouté avec Success");
+                if (VerifierChamps())
+                {
+                    ado.command = new System.Data.SqlClient.SqlCommand("INSERT INTO utilisateur VALUES (@loginn,@motDePass,@nomUtilisateur,@prenomUtilisateur,@sexe,@dateNaiss,@adresse,@email,@telephone, @admine)", ado.connection);
+                    ado.command.Parameters.AddWithValue("@loginn", txtbxLogin.Text);
+                    ado.command.Parameters.AddWithValue("@motDePass", txtbxMdp.Text);
+                    ado.command.Parameters.AddWithValue("@nomUtilisateur", txtbxNom.Text);
+                    ado.command.Parameters.AddWithValue("@prenomUtilisateur", txtbxPre.Text);
+                    ado.command.Parameters.AddWithValue("@sexe", cmbxSexe.Text);
+                    ado.command.Parameters.AddWithValue("@dateNaiss", dtmPicker.Value);
+                    ado.command.Parameters.AddWithValue("@adresse", rchTxtbxAdr.Text);
+                    ado.command.Parameters.AddWithValue("@email", txtbxEmail.Text);
+                    ado.command.Parameters.AddWithValue("@telephone", txtbxTel.Text);
+                    ado.command.Parameters.AddWithValue("@admine", 0);
+                    ado.Connecter();
+                    ado.command.ExecuteNonQuery();
+                    MessageBox.Show("Utilisateur Ajouté avec Success");
+                    ViderChamps();
+                }
+                else
+                {
+                    MessageBox.Show("Veuillez Remplir les Champs S'il vous plait!");
+                }
+                
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
             finally 
             { 
                 ado.Deconnecter();
                 afficher();
-                ViderChamps();
+                
             }
         }
 
